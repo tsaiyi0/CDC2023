@@ -1,0 +1,98 @@
+---
+title: "cdc 2023 health data"
+output: pdf_document
+date: "2023-09-30"
+---
+```{r}
+library(tidyverse)
+```
+
+```{r}
+diabetes <- read_csv("HealthSciences_Dataset.csv")
+
+names(diabetes)
+```
+
+```{r}
+head(diabetes)
+```
+
+```{r}
+diabetes_readmit <- diabetes |> 
+  filter(readmitted != "NO")
+
+diabetes_readmit
+```
+
+
+```{r}
+diabetes_readmit |> 
+  group_by(gender) |> 
+  summarize(n_gender = n()) |> 
+  ggplot(mapping = aes(x = gender)) +
+  geom_bar()
+```
+
+```{r}
+diabetes_readmit |> 
+  group_by(race) |> 
+  summarise(n_race = n()) |> 
+  ggplot(mapping = aes(x = race)) +
+  geom_bar()
+```
+
+```{r}
+diabetes_readmit |> 
+  group_by(age) |> 
+  summarise(n_age = n())
+```
+
+
+```{r}
+diabetes_readmit |> 
+  group_by(num_medications) |> 
+  summarise(n_meds = n())
+```
+
+```{r}
+diabetes_demographic <- diabetes_readmit |> 
+  group_by(gender, race, age) |> 
+  summarize(n = n())
+
+diabetes_demographic
+```
+
+```{r}
+diabetes_demographic |> 
+  ggplot(mapping = aes(x = group_by(gender, race, age), y = n)) +
+  geom_bar()
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
