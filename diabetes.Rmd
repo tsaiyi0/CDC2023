@@ -92,7 +92,7 @@ cat("Precision (Class >30):", round(precision_greater30 * 100, 2), "%\n")
 
 ```
 ```{r}
-# Predicting the values for train dataset
+# Predicting the values for test dataset
 test$PredictedClass <- predict(multinom_mod, newdata = test, "class")
 
 # Building classification table, columns = predicted, rows = actual
@@ -151,11 +151,10 @@ result_df <- data.frame(
 # Print the top 5 most influential predictor variables for each class
 print(result_df)
 
-
 ```
 
 ```{r}
-abs(coef(multinom_mod))
+(coef(multinom_mod))
 ```
 
 
@@ -175,15 +174,17 @@ results_table <- data.frame(
 print(results_table)
 ```
 ```{r}
-results_table$
+p
 ```
+
+
 
 ```{r}
 null_model <- multinom(readmitted ~ 1, data = diabetes)
 lrt_result <- lrtest(multinom_mod, null_model)
 lrt_result
 
-#he likelihood ratio test results suggest that Model 1, which includes predictor variables, provides a significantly better fit to the data than Model 2 (the null model) based on the the associated p-value. 
+#the likelihood ratio test results suggest that Model 1, which includes predictor variables, provides a significantly better fit to the data than Model 2 (the null model) based on the the associated p-value. 
 ```
 
 
