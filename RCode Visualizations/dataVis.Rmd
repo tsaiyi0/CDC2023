@@ -1,8 +1,10 @@
 ---
 title: "CDC 2023: Data visualizations for 1999-2008 Diabetes Data"
-name: "Grace Sosa"
+name: Grace Sosa
 date: "9/30/23"
-output: html_notebook
+output:
+  html_notebook: default
+  pdf_document: default
 ---
 
 This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
@@ -22,17 +24,16 @@ The preview shows you a rendered HTML copy of the contents of the editor. Conseq
 ```{r, eval = TRUE}
 pop_change <- read_csv('HealthSciences_Dataset (2).csv', show_col_types = FALSE) |> 
   select(patient_nbr, race, gender, age, number_diagnoses, diabetesMed, readmitted) |> 
-  filter(gender != 'Unknown/Invalid')
+  filter(gender != 'Unknown/Invalid', race != '?')
   
 pop_change
 ```
 
-#Some control data I am trying to add
+#Some control data I am trying to add later
 ```{r} 
-pop_change <- control_data(
- Ethnicity = c("Caucasian", "African American", "Other", "Asian", "Hispanic"),
-         Population = c(226962, 35470, 2448, 11279, 32832))
-
+#control_data <- pop_change (
+ #Ethnicity = c("Caucasian", "African American", "Other", "Asian", "Hispanic"),
+         #Population = c(226962, 35470, 2448, 11279, 32832))
 ```
 
 
@@ -63,10 +64,11 @@ age_percent
 
 ```{r, eval = TRUE}
 pop_change |> 
+  mutate(readmitted = ifelse(readmitted == "NO", "0", readmitted)) |> 
   ggplot(mapping = aes(x = readmitted, fill = gender)) +
   geom_bar() +
-  labs(title = "Percent readmitted by Gender",
-       xlab = "Number readmitted")
+  labs(title = "Number readmitted by Gender",
+       x = "Readmitted Count")
  
 ```
 
@@ -75,17 +77,20 @@ pop_change |>
 
 ```{r, eval = TRUE}
 pop_change |> 
+  mutate(readmitted = ifelse(readmitted == "NO", "0", readmitted)) |> 
   ggplot(mapping = aes(x = readmitted, fill = race)) +
-  labs(title = "Percent readmitted by Race",
-       xlab = "Number readmitted") +
+  labs(title = "Number Readmitted by Race",
+       x = "Readmitted Count") +
   geom_bar()
+  
 ```
 
 ```{r, eval = TRUE}
 pop_change |> 
+  mutate(readmitted = ifelse(readmitted == "NO", "0", readmitted)) |> 
   ggplot(mapping = aes(x = readmitted, fill = age)) +
-  labs(title = "Percent readmitted by Age",
-       xlab = "Number readmitted") +
+  labs(title = "Number Readmitted by Age",
+       x = "Readmitted Count") +
   geom_bar()
 ```
 
