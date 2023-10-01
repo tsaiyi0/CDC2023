@@ -1,0 +1,94 @@
+---
+title: "CDC 2023: Data visualizations for 1999-2008 Diabetes Data"
+name: "Grace Sosa"
+date: "9/30/23"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+library(tidyverse)
+library(knitr)
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+```{r, eval = TRUE}
+pop_change <- read_csv('HealthSciences_Dataset (2).csv', show_col_types = FALSE) |> 
+  select(patient_nbr, race, gender, age, number_diagnoses, diabetesMed, readmitted) |> 
+  filter(gender != 'Unknown/Invalid')
+  
+pop_change
+```
+
+#Some control data I am trying to add
+```{r} 
+pop_change <- control_data(
+ Ethnicity = c("Caucasian", "African American", "Other", "Asian", "Hispanic"),
+         Population = c(226962, 35470, 2448, 11279, 32832))
+
+```
+
+
+```{r, eval = TRUE}
+gender_percent <- pop_change |> 
+ group_by(gender) |> 
+  summarize(percent = n() /nrow(pop_change) * 100)
+
+gender_percent
+```
+
+```{r, eval = TRUE}
+race_percent <- pop_change |> 
+ group_by(race) |> 
+  summarize(percent = n() /nrow(pop_change) * 100)
+
+race_percent
+```
+
+```{r, eval = TRUE}
+age_percent <- pop_change |> 
+ group_by(age) |> 
+  summarize(percent = n() /nrow(pop_change) * 100)
+
+age_percent
+```
+
+
+```{r, eval = TRUE}
+pop_change |> 
+  ggplot(mapping = aes(x = readmitted, fill = gender)) +
+  geom_bar() +
+  labs(title = "Percent readmitted by Gender",
+       xlab = "Number readmitted")
+ 
+```
+
+
+
+
+```{r, eval = TRUE}
+pop_change |> 
+  ggplot(mapping = aes(x = readmitted, fill = race)) +
+  labs(title = "Percent readmitted by Race",
+       xlab = "Number readmitted") +
+  geom_bar()
+```
+
+```{r, eval = TRUE}
+pop_change |> 
+  ggplot(mapping = aes(x = readmitted, fill = age)) +
+  labs(title = "Percent readmitted by Age",
+       xlab = "Number readmitted") +
+  geom_bar()
+```
+
+
+
+
